@@ -11,7 +11,8 @@ func punchHole(con *net.UDPConn,addr *net.UDPAddr) {
 		con.SetReadDeadline(time.Now().Add(time.Second/2))
 		n, _, err := con.ReadFromUDP(buf)
 		if err != nil {
-			fmt.Print(err)
+			fmt.Println("ERROR:")
+			fmt.Println(err)
 			return
 		}
 		fmt.Printf("read %d bytes\n",n)

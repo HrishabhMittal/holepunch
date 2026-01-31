@@ -23,11 +23,11 @@ func main() {
 	fmt.Printf("ip: %s\nport: %d\n",ip,port)
 	var pip string
 	var pport int
-	con, _ := net.ListenUDP("udp",lAddr)
-	pAddr, _ := net.ResolveUDPAddr("udp",fmt.Sprintf("%s:%d",pip,pport))
 	fmt.Print("peer ip:port > ")
 	fmt.Scanf("%s %d",&pip,&pport)
 	fmt.Printf("ip: %s\nport: %d\n",pip,pport)
+	con, _ := net.ListenUDP("udp",lAddr)
+	pAddr, _ := net.ResolveUDPAddr("udp",fmt.Sprintf("%s:%d",pip,pport))
 
 	punchHole(con,pAddr)
 
