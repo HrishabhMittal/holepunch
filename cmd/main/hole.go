@@ -15,18 +15,17 @@ func punchHole(con *net.UDPConn,addr *net.UDPAddr) (bool) {
 					return
 				default:
 					con.WriteToUDP([]byte("hello"),addr)
+					time.Sleep(100*time.Millisecond)
 			}
 		}
 	}(ch)
-	fmt.Println("send hello to addr")
 	con.SetReadDeadline(time.Now().Add(time.Second*10))
-	n, _, err := con.ReadFromUDP(buf)
+	_, _, err := con.ReadFromUDP(buf)
+	ch<-true
 	if err != nil {
 		fmt.Println("ERROR:")
 		fmt.Println(err)
 		return false
 	}
-	fmt.Printf("read %d bytes\n",n)
 	return true
 }
-
