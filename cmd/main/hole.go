@@ -7,18 +7,26 @@ import (
 )
 func punchHole(con *net.UDPConn,addr *net.UDPAddr) (bool) {
 	buf := make([]byte, 128)
-	// for {
-		con.WriteToUDP([]byte("hello"),addr)
-		fmt.Println("send hello to addr")
-		con.SetReadDeadline(time.Now().Add(time.Second/2))
-		n, _, err := con.ReadFromUDP(buf)
-		if err != nil {
-			fmt.Println("ERROR:")
-			fmt.Println(err)
-			return false
+	ch := make(chan bool,1)
+	go func(chan bool) {
+		for {
+			select {
+				case <-ch:
+					return
+				default:
+					con.WriteToUDP([]byte("hello"),addr)
+			}
 		}
-		fmt.Printf("read %d bytes\n",n)
-		return true
-	// }
+	}(ch)
+	fmt.Println("send hello to addr")
+	con.SetReadDeadline(time.Now().Add(time.Second*10))
+	n, _, err := con.ReadFromUDP(buf)
+	if err != nil {
+		fmt.Println("ERROR:")
+		fmt.Println(err)
+		return false
+	}
+	fmt.Printf("read %d bytes\n",n)
+	return true
 }
 
